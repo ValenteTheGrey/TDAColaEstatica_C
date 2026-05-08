@@ -27,6 +27,7 @@ void crearCola(tCola* p);
 int ponerEnCola(tCola* p, const void* d, size_t tamDato);
 int sacoDeCola(tCola* p, void* d, size_t tamDato);
 int esColaLlena(const tCola* p, size_t tamDato);
+int esColaVacia(const tCola* p);
 
 
 #endif //COLAESTATICA_COLAESTATICA_H
