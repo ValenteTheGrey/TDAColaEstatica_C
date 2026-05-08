@@ -23,12 +23,12 @@ typedef struct{
     size_t tamDisp;
 }tCola;
 
-void crearCola(tCola* p);
-int ponerEnCola(tCola* p, const void* d, size_t tamDato);
-int sacoDeCola(tCola* p, void* d, size_t tamDato);
-int esColaLlena(const tCola* p, size_t tamDato);
-int esColaVacia(const tCola* p);
+void crearCola(tCola* pc);
+int ponerEnCola(tCola* pc, const void* pd, size_t tamDato);
+int sacoDeCola(tCola* pc, void* pd, size_t tamDato);
+int esColaLlena(const tCola* pc, size_t tamDato);
+int esColaVacia(const tCola* pc);
 int verFrenteDeCola(tCola* pc, void* pd, size_t tamDato);
-
+void vaciarCola(tCola* pc);
 
 #endif //COLAESTATICA_COLAESTATICA_H

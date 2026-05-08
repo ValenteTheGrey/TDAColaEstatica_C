@@ -6,82 +6,82 @@
 
 #include "ColaEstatica.h"
 
-void crearCola(tCola* p)
+void crearCola(tCola* pc)
 {
-    p->pri = TAM - 90;          //Para recordar que puede iniciar en cualquier lugar menor que TAM
-    p->ult = TAM - 90;          //La cola es circular, puede empezar en cualquier lado a diferencia de la Pila
-    p->tamDisp = TAM;
+    pc->pri = TAM - 90;          //Para recordar que puede iniciar en cualquier lugar menor que TAM
+    pc->ult = TAM - 90;          //La cola es circular, puede empezar en cualquier lado a diferencia de la Pila
+    pc->tamDisp = TAM;
 }
 
-int ponerEnCola(tCola* p, const void* d, size_t tamDato)
+int ponerEnCola(tCola* pc, const void* pd, size_t tamDato)
 {
     int ini, fin;      //Se trata de posiciones del dato a insertar por si debemos partirlo
 
-    if((tamDato + sizeof(size_t)) > p->tamDisp)        //En cada posición se guarda el dato y el tamaño del dato
+    if((tamDato + sizeof(size_t)) > pc->tamDisp)        //En cada posición se guarda el dato y el tamaño del dato
         return SIN_MEMORIA;                            //Si p->tamDisp nos dice que hay espacio para guardar todo
 
-    if((ini = MINIMO(TAM - p->ult, sizeof(size_t))) > 0)
-        memcpy(p->cola + p->ult, &tamDato, ini);
+    if((ini = MINIMO(TAM - pc->ult, sizeof(size_t))) > 0)
+        memcpy(pc->cola + pc->ult, &tamDato, ini);
 
     if((fin = sizeof(size_t) - ini) !=0)
-        memcpy(p->cola, ((char*)&tamDato) + ini, fin);
+        memcpy(pc->cola, ((char*)&tamDato) + ini, fin);
 
-    p->ult = !fin ? p->ult + sizeof(size_t) : fin;
+    pc->ult = !fin ? pc->ult + sizeof(size_t) : fin;
 
     //Acá recién empezamos a guardar el dato
-    if((ini = MINIMO(TAM - p->ult, tamDato)) > 0)
-        memcpy(p->cola + p->ult, d, ini);
+    if((ini = MINIMO(TAM - pc->ult, tamDato)) > 0)
+        memcpy(pc->cola + pc->ult, pd, ini);
 
     if((fin = tamDato - ini) != 0)
-        memcpy(p->cola, d + ini, fin);
+        memcpy(pc->cola, pd + ini, fin);
 
-    p->ult = !fin ? p->ult + tamDato : fin;
-    p->tamDisp -= (tamDato + sizeof(size_t));
+    pc->ult = !fin ? pc->ult + tamDato : fin;
+    pc->tamDisp -= (tamDato + sizeof(size_t));
 
 
     return TODO_OK;
 }
 
 
-int sacoDeCola(tCola* p, void* d, size_t tamDato)       //tamDato es el espacio que tengo para copiar
+int sacoDeCola(tCola* pc, void* pd, size_t tamDato)       //tamDato es el espacio que tengo para copiar
 {
     size_t tamInfoCola;
     int ini, fin;
 
-    if(p->tamDisp == TAM)
+    if(pc->tamDisp == TAM)
         return COLA_VACIA;
 
-    if((ini = MINIMO(TAM - p->pri, sizeof(size_t))) > 0)
-        memcpy(&tamInfoCola, p->cola + p->pri, ini);
+    if((ini = MINIMO(TAM - pc->pri, sizeof(size_t))) > 0)
+        memcpy(&tamInfoCola, pc->cola + pc->pri, ini);
 
     if((fin = sizeof(size_t) - ini) > 0)                    //Indica dato particionado
-        memcpy(((char*)&tamInfoCola) + ini, p->cola, fin);
+        memcpy(((char*)&tamInfoCola) + ini, pc->cola, fin);
 
-    p->pri = fin ? fin : p->pri + sizeof(size_t);
+    pc->pri = fin ? fin : pc->pri + sizeof(size_t);
 
-    if((ini = MINIMO(TAM - p->pri, tamInfoCola)) > 0)
-        memcpy(d, p->cola + p->pri, MINIMO(ini, tamDato));
+    if((ini = MINIMO(TAM - pc->pri, tamInfoCola)) > 0)
+        memcpy(pd, pc->cola + pc->pri, MINIMO(ini, tamDato));
 
     if((fin = tamInfoCola - ini) > 0 && tamDato - ini > 0)
-        memcpy(d + ini, p->cola, MINIMO(fin, tamDato - ini));
+        memcpy(pd + ini, pc->cola, MINIMO(fin, tamDato - ini));
 
 
-    p->pri = fin ? fin : tamInfoCola + p->pri;
-    p->tamDisp += sizeof(size_t) + tamInfoCola;
+    pc->pri = fin ? fin : tamInfoCola + pc->pri;
+    pc->tamDisp += sizeof(size_t) + tamInfoCola;
 
     return TODO_OK;
 }
 
 
-int esColaLlena(const tCola* p, size_t tamDato)
+int esColaLlena(const tCola* pc, size_t tamDato)
 {
-    return (tamDato + sizeof(size_t)) > p->tamDisp;
+    return (tamDato + sizeof(size_t)) > pc->tamDisp;
 }
 
 
-int esColaVacia(const tCola* p)
+int esColaVacia(const tCola* pc)
 {
-    return p->tamDisp ==TAM;
+    return pc->tamDisp ==TAM;
 }
 
 
@@ -108,6 +108,14 @@ int verFrenteDeCola(tCola* pc, void* pd, size_t tamDato)
 
     //No se modifican ni pc->pri ni pc->ult ni pc->tamDips ya que no se quita el elemento
 
-    return TODO_OK
+    return TODO_OK;
 
+}
+
+
+void vaciarCola(tCola* pc)
+{
+    pc->pri = TAM - 90;
+    pc->ult = TAM - 90;
+    pc->tamDisp = TAM;      //En verdad solo con esto alcanza
 }
