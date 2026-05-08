@@ -83,3 +83,31 @@ int esColaVacia(const tCola* p)
 {
     return p->tamDisp ==TAM;
 }
+
+
+int verFrenteDeColaEst(tColaEst* pc, void* pd, size_t tamDato)
+{
+    size_t tamInfoCola;
+
+    int ini, fin;
+
+    if((ini = MINIMO(TAM - pc->pri, sizeof(size_t))) > 0)
+        memcpy(&tamInfoCola, pc->cola + pc->pri, ini);
+
+    if((fin = sizeof(size_t) - ini) != 0)
+        memcpy((char*)&tamInfoCola + ini, pc->cola, fin);
+
+    //No quiero mover pc->pri ya que no voy a quitar el elemento de la cola
+    //Empiezo con los datos
+
+    if((ini = MINIMO(TAM - pc->pri, tamInfoCola)) > 0)
+        memcpy(pd, (char*)pc->cola + pc->pri, MINIMO(ini, tamDato));
+
+    if((fin = tamInfoCola - ini) != 0 && tamDato - ini > 0)
+        memcpy((char*)pd + ini, pc->cola, MINIMO(fin, tamDato - ini));
+
+    //No se modifican ni pc->pri ni pc->ult ni pc->tamDips ya que no se quita el elemento
+
+    return TODO_OK
+
+}
