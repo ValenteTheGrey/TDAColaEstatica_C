@@ -85,7 +85,7 @@ int esColaVacia(const tCola* p)
 }
 
 
-int verFrenteDeColaEst(tColaEst* pc, void* pd, size_t tamDato)
+int verFrenteDeCola(tCola* pc, void* pd, size_t tamDato)
 {
     size_t tamInfoCola;
 
